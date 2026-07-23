@@ -1,0 +1,14 @@
+{
+  "name": "kaze",
+  "private": true,
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev:web": "pnpm --filter @kaze/web dev",
+    "dev:mobile": "pnpm --filter @kaze/mobile start",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
+  "packageManager": "pnpm@11.17.0"
+}
