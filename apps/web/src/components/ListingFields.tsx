@@ -1,5 +1,6 @@
 import type { Listing, Location } from "@kaze/shared";
 import { LocationPicker } from "./LocationPicker";
+import { MapPicker } from "./MapPicker";
 
 const inputClass =
   "mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
@@ -153,6 +154,13 @@ export function ListingFields({
         <span className="block text-sm font-medium">Location</span>
         <div className="mt-1">
           <LocationPicker locations={locations} defaultLocationId={defaults?.locationId} />
+        </div>
+      </div>
+
+      <div>
+        <span className="block text-sm font-medium">Map location</span>
+        <div className="mt-1">
+          <MapPicker defaultLat={defaults?.lat} defaultLng={defaults?.lng} />
         </div>
       </div>
     </div>

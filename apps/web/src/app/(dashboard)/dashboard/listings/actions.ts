@@ -10,6 +10,8 @@ function parseListingFields(formData: FormData) {
   const bedrooms = formData.get("bedrooms");
   const bathrooms = formData.get("bathrooms");
   const sizeSqm = formData.get("size_sqm");
+  const lat = formData.get("lat");
+  const lng = formData.get("lng");
 
   return {
     title: String(formData.get("title") ?? "").trim(),
@@ -22,6 +24,8 @@ function parseListingFields(formData: FormData) {
     bathrooms: bathrooms ? Number(bathrooms) : null,
     size_sqm: sizeSqm ? Number(sizeSqm) : null,
     location_id: String(formData.get("location_id") ?? ""),
+    lat: lat ? Number(lat) : null,
+    lng: lng ? Number(lng) : null,
   };
 }
 
