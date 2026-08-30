@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import type { Location } from "@kaze/shared";
 
 const selectClass =
@@ -10,9 +13,33 @@ export function SearchFilters({
   locations: Location[];
   values: Record<string, string | undefined>;
 }) {
-  const provinces = [...new Set(locations.map((l) => l.province))].sort();
-  const districts = [...new Set(locations.map((l) => l.district))].sort();
-  const sectors = [...new Set(locations.map((l) => l.sector))].sort();
+  const [province, setProvince] = useState(values.province ?? "");
+  const [district, setDistrict] = useState(values.district ?? "");
+  const [sector, setSector] = useState(values.sector ?? "");
+
+  const provinces = useMemo(() => [...new Set(locations.map((l) => l.province))].sort(), [locations]);
+
+  const districts = useMemo(
+    () =>
+      [
+        ...new Set(
+          locations.filter((l) => !province || l.province === province).map((l) => l.district),
+        ),
+      ].sort(),
+    [locations, province],
+  );
+
+  const sectors = useMemo(
+    () =>
+      [
+        ...new Set(
+          locations
+            .filter((l) => (!province || l.province === province) && (!district || l.district === district))
+            .map((l) => l.sector),
+        ),
+      ].sort(),
+    [locations, province, district],
+  );
 
   return (
     <form className="flex flex-wrap gap-3 border-b border-zinc-200 pb-6 dark:border-zinc-800">
@@ -31,7 +58,16 @@ export function SearchFilters({
         <option value="office">Office</option>
       </select>
 
-      <select name="province" defaultValue={values.province ?? ""} className={selectClass}>
+      <select
+        name="province"
+        value={province}
+        onChange={(e) => {
+          setProvince(e.target.value);
+          setDistrict("");
+          setSector("");
+        }}
+        className={selectClass}
+      >
         <option value="">Any province</option>
         {provinces.map((p) => (
           <option key={p} value={p}>
@@ -40,7 +76,15 @@ export function SearchFilters({
         ))}
       </select>
 
-      <select name="district" defaultValue={values.district ?? ""} className={selectClass}>
+      <select
+        name="district"
+        value={district}
+        onChange={(e) => {
+          setDistrict(e.target.value);
+          setSector("");
+        }}
+        className={selectClass}
+      >
         <option value="">Any district</option>
         {districts.map((d) => (
           <option key={d} value={d}>
@@ -49,7 +93,12 @@ export function SearchFilters({
         ))}
       </select>
 
-      <select name="sector" defaultValue={values.sector ?? ""} className={selectClass}>
+      <select
+        name="sector"
+        value={sector}
+        onChange={(e) => setSector(e.target.value)}
+        className={selectClass}
+      >
         <option value="">Any sector</option>
         {sectors.map((s) => (
           <option key={s} value={s}>
