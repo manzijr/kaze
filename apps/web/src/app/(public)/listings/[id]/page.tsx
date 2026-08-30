@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { BedDouble, Bath, Ruler, MapPin } from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { ListingsMap } from "@/components/ListingsMap";
 import { ContactAgentForm } from "@/components/ContactAgentForm";
@@ -48,18 +49,25 @@ export default async function ListingDetailPage({ params }: Props) {
 
   const location = Array.isArray(listing.locations) ? listing.locations[0] : listing.locations;
   const photos = [...listing.listing_photos].sort((a, b) => a.sort_order - b.sort_order);
+  const [hero, ...rest] = photos;
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
-      {photos.length > 0 && (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-          {photos.map((photo) => (
+      {hero && (
+        <div className="grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
+          {/* eslint-disable-next-line @next/next/no-img-element -- remote, user-uploaded listing photos */}
+          <img
+            src={hero.url}
+            alt={listing.title}
+            className={`h-full w-full object-cover ${rest.length ? "col-span-2 row-span-2" : "col-span-4 row-span-2"} aspect-video`}
+          />
+          {rest.slice(0, 4).map((photo) => (
             // eslint-disable-next-line @next/next/no-img-element -- remote, user-uploaded listing photos
             <img
               key={photo.url}
               src={photo.url}
               alt={listing.title}
-              className="aspect-square rounded-md object-cover"
+              className="aspect-square h-full w-full object-cover"
             />
           ))}
         </div>
@@ -67,27 +75,45 @@ export default async function ListingDetailPage({ params }: Props) {
 
       <div className="mt-8 grid grid-cols-1 gap-8 lg:grid-cols-[1fr_320px]">
         <div>
-          <h1 className="text-2xl font-semibold">{listing.title}</h1>
-          <p className="mt-2 text-xl font-semibold">
+          <p className="text-2xl font-bold">
             {listing.price.toLocaleString()} {listing.currency}
             {listing.listing_type === "rent" && (
-              <span className="font-normal text-zinc-500">/mo</span>
+              <span className="text-base font-normal text-muted-foreground">/mo</span>
             )}
           </p>
-          <p className="mt-1 text-sm text-zinc-500">
-            {listing.bedrooms != null && `${listing.bedrooms} bd · `}
-            {listing.bathrooms != null && `${listing.bathrooms} ba · `}
-            {listing.size_sqm != null && `${listing.size_sqm} sqm`}
-          </p>
+          <h1 className="mt-1 text-lg font-medium">{listing.title}</h1>
           {location && (
-            <p className="mt-1 text-sm text-zinc-500">
+            <p className="mt-1 flex items-center gap-1 text-sm text-muted-foreground">
+              <MapPin className="h-4 w-4" />
               {location.sector}, {location.district}, {location.province}
             </p>
           )}
 
-          <p className="mt-6 whitespace-pre-wrap text-sm leading-relaxed">
-            {listing.description}
-          </p>
+          <div className="mt-5 flex flex-wrap gap-6 rounded-xl border border-border bg-muted/50 px-5 py-4">
+            {listing.bedrooms != null && (
+              <div className="flex items-center gap-2">
+                <BedDouble className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">{listing.bedrooms} bed</span>
+              </div>
+            )}
+            {listing.bathrooms != null && (
+              <div className="flex items-center gap-2">
+                <Bath className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">{listing.bathrooms} bath</span>
+              </div>
+            )}
+            {listing.size_sqm != null && (
+              <div className="flex items-center gap-2">
+                <Ruler className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">{listing.size_sqm} sqm</span>
+              </div>
+            )}
+          </div>
+
+          <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+            About this home
+          </h2>
+          <p className="mt-2 whitespace-pre-wrap text-sm leading-relaxed">{listing.description}</p>
 
           {listing.lat != null && listing.lng != null && (
             <div className="mt-8 h-72">
@@ -108,9 +134,12 @@ export default async function ListingDetailPage({ params }: Props) {
         </div>
 
         <div>
-          <div className="rounded-lg border border-zinc-200 p-4 dark:border-zinc-800">
-            <h2 className="text-sm font-medium">Interested in this property?</h2>
-            <div className="mt-3">
+          <div className="sticky top-20 rounded-xl border border-border bg-surface p-5 shadow-sm">
+            <h2 className="text-sm font-semibold">Interested in this property?</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              Send a message and the owner or agent will contact you directly.
+            </p>
+            <div className="mt-4">
               <ContactAgentForm listingId={listing.id} />
             </div>
           </div>

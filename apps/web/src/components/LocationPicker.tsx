@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import type { Location } from "@kaze/shared";
 
 const selectClass =
-  "mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
+  "mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:ring-2 focus:ring-primary/40";
 
 export function LocationPicker({
   locations,

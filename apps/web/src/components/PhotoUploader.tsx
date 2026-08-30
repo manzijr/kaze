@@ -87,7 +87,7 @@ export function PhotoUploader({
         ))}
       </div>
 
-      <label className="mt-4 inline-block cursor-pointer rounded-md border border-dashed border-zinc-300 px-4 py-2 text-sm text-zinc-600 dark:border-zinc-700 dark:text-zinc-400">
+      <label className="mt-4 inline-block cursor-pointer rounded-lg border border-dashed border-border px-4 py-2 text-sm text-muted-foreground transition hover:border-primary hover:text-primary">
         {uploading ? "Uploading…" : "Add photos"}
         <input
           type="file"

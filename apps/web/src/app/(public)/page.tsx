@@ -74,13 +74,19 @@ export default async function HomePage({
   ]);
 
   return (
-    <div className="px-6 py-8">
+    <div className="px-6 py-6">
       <SearchFilters locations={locations ?? []} values={filters} />
 
-      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_420px]">
+      <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_440px]">
         <div>
+          <p className="mb-4 text-sm text-muted-foreground">
+            {listings?.length ?? 0} {listings?.length === 1 ? "home" : "homes"} found
+          </p>
           {!listings?.length ? (
-            <p className="text-sm text-zinc-500">No listings match your search yet.</p>
+            <div className="flex flex-col items-center gap-1 rounded-xl border border-dashed border-border py-16 text-center">
+              <p className="font-medium">No listings match your search</p>
+              <p className="text-sm text-muted-foreground">Try widening your filters.</p>
+            </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {listings.map((listing) => (
@@ -89,7 +95,7 @@ export default async function HomePage({
             </div>
           )}
         </div>
-        <div className="h-[400px] lg:sticky lg:top-8 lg:h-[calc(100vh-8rem)]">
+        <div className="h-[400px] lg:sticky lg:top-20 lg:h-[calc(100vh-6.5rem)]">
           <ListingsMap listings={listings ?? []} />
         </div>
       </div>

@@ -1,6 +1,8 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
+import { Home, CheckCircle2 } from "lucide-react";
 import { sendMagicLink } from "./actions";
 
 const initialState = { error: null as string | null, sent: false };
@@ -9,21 +11,28 @@ export default function LoginPage() {
   const [state, formAction, pending] = useActionState(sendMagicLink, initialState);
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center px-4 py-32">
-      <div className="w-full max-w-sm space-y-6">
+    <div className="flex flex-1 flex-col items-center justify-center bg-muted/40 px-4 py-32">
+      <div className="w-full max-w-sm rounded-2xl border border-border bg-surface p-8 shadow-sm">
         <div className="text-center">
-          <h1 className="text-2xl font-semibold tracking-tight">Sign in to Kaze</h1>
-          <p className="mt-2 text-sm text-zinc-500">
+          <Link
+            href="/"
+            className="mx-auto flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-primary-foreground"
+          >
+            <Home className="h-5 w-5" strokeWidth={2.5} />
+          </Link>
+          <h1 className="mt-4 text-2xl font-bold tracking-tight">Sign in to Kaze</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
             For agents and property owners. We&apos;ll email you a sign-in link.
           </p>
         </div>
 
         {state.sent ? (
-          <p className="rounded-md bg-emerald-50 px-4 py-3 text-sm text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300">
+          <p className="mt-6 flex items-start gap-2 rounded-lg bg-accent/10 px-4 py-3 text-sm text-accent">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
             Check your email for a sign-in link.
           </p>
         ) : (
-          <form action={formAction} className="space-y-4">
+          <form action={formAction} className="mt-6 space-y-4">
             <div>
               <label htmlFor="email" className="block text-sm font-medium">
                 Email
@@ -34,7 +43,7 @@ export default function LoginPage() {
                 type="email"
                 required
                 autoComplete="email"
-                className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+                className="mt-1 block w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none transition focus:ring-2 focus:ring-primary/40"
                 placeholder="you@example.com"
               />
             </div>
@@ -44,7 +53,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={pending}
-              className="w-full rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-black"
+              className="w-full rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:opacity-50"
             >
               {pending ? "Sending…" : "Send sign-in link"}
             </button>

@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Search } from "lucide-react";
 import type { Location } from "@kaze/shared";
 
-const selectClass =
-  "rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900";
+const pillClass =
+  "rounded-full border-0 bg-muted px-4 py-2.5 text-sm font-medium text-foreground outline-none transition hover:bg-border/60 focus:ring-2 focus:ring-primary/40";
 
 export function SearchFilters({
   locations,
@@ -42,14 +43,14 @@ export function SearchFilters({
   );
 
   return (
-    <form className="flex flex-wrap gap-3 border-b border-zinc-200 pb-6 dark:border-zinc-800">
-      <select name="listing_type" defaultValue={values.listing_type ?? ""} className={selectClass}>
+    <form className="flex flex-wrap items-center gap-2 rounded-2xl border border-border bg-surface p-2.5 shadow-sm">
+      <select name="listing_type" defaultValue={values.listing_type ?? ""} className={pillClass}>
         <option value="">For sale or rent</option>
         <option value="rent">For rent</option>
         <option value="sale">For sale</option>
       </select>
 
-      <select name="property_type" defaultValue={values.property_type ?? ""} className={selectClass}>
+      <select name="property_type" defaultValue={values.property_type ?? ""} className={pillClass}>
         <option value="">Any property type</option>
         <option value="house">House</option>
         <option value="apartment">Apartment</option>
@@ -57,6 +58,8 @@ export function SearchFilters({
         <option value="commercial">Commercial</option>
         <option value="office">Office</option>
       </select>
+
+      <span className="h-6 w-px bg-border" aria-hidden />
 
       <select
         name="province"
@@ -66,7 +69,7 @@ export function SearchFilters({
           setDistrict("");
           setSector("");
         }}
-        className={selectClass}
+        className={pillClass}
       >
         <option value="">Any province</option>
         {provinces.map((p) => (
@@ -83,7 +86,7 @@ export function SearchFilters({
           setDistrict(e.target.value);
           setSector("");
         }}
-        className={selectClass}
+        className={pillClass}
       >
         <option value="">Any district</option>
         {districts.map((d) => (
@@ -97,7 +100,7 @@ export function SearchFilters({
         name="sector"
         value={sector}
         onChange={(e) => setSector(e.target.value)}
-        className={selectClass}
+        className={pillClass}
       >
         <option value="">Any sector</option>
         {sectors.map((s) => (
@@ -107,7 +110,9 @@ export function SearchFilters({
         ))}
       </select>
 
-      <select name="min_bedrooms" defaultValue={values.min_bedrooms ?? ""} className={selectClass}>
+      <span className="h-6 w-px bg-border" aria-hidden />
+
+      <select name="min_bedrooms" defaultValue={values.min_bedrooms ?? ""} className={pillClass}>
         <option value="">Any bedrooms</option>
         <option value="1">1+ bd</option>
         <option value="2">2+ bd</option>
@@ -120,20 +125,21 @@ export function SearchFilters({
         name="min_price"
         placeholder="Min price"
         defaultValue={values.min_price ?? ""}
-        className={`w-32 ${selectClass}`}
+        className={`w-28 ${pillClass}`}
       />
       <input
         type="number"
         name="max_price"
         placeholder="Max price"
         defaultValue={values.max_price ?? ""}
-        className={`w-32 ${selectClass}`}
+        className={`w-28 ${pillClass}`}
       />
 
       <button
         type="submit"
-        className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black"
+        className="ml-auto flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
       >
+        <Search className="h-4 w-4" strokeWidth={2.5} />
         Search
       </button>
     </form>

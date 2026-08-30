@@ -20,7 +20,7 @@ export function NewListingActions({ locations }: { locations: Location[] }) {
           name="intent"
           value="draft"
           disabled={pending}
-          className="rounded-md border border-zinc-300 px-4 py-2 text-sm font-medium disabled:opacity-50 dark:border-zinc-700"
+          className="rounded-full border border-border px-4 py-2 text-sm font-semibold transition hover:bg-muted disabled:opacity-50"
         >
           Save as draft
         </button>
@@ -29,7 +29,7 @@ export function NewListingActions({ locations }: { locations: Location[] }) {
           name="intent"
           value="submit_review"
           disabled={pending}
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-black"
+          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover disabled:opacity-50"
         >
           Submit for review
         </button>

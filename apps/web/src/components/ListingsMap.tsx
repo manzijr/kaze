@@ -64,5 +64,7 @@ export function ListingsMap({ listings }: { listings: MapListing[] }) {
     return <p className="text-sm text-red-600 dark:text-red-400">Couldn&apos;t load the map: {loadError}</p>;
   }
 
-  return <div ref={mapRef} className="h-full w-full rounded-lg bg-zinc-100 dark:bg-zinc-900" />;
+  return (
+    <div ref={mapRef} className="h-full w-full rounded-xl border border-border bg-muted" />
+  );
 }

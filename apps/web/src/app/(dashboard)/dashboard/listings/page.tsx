@@ -32,20 +32,20 @@ export default async function ListingsPage() {
         <h1 className="text-xl font-semibold">Your listings</h1>
         <Link
           href="/dashboard/listings/new"
-          className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white dark:bg-white dark:text-black"
+          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
         >
           New listing
         </Link>
       </div>
 
       {!listings?.length ? (
-        <p className="mt-8 text-sm text-zinc-500">
+        <p className="mt-8 text-sm text-muted-foreground">
           You haven&apos;t listed any properties yet.
         </p>
       ) : (
         <table className="mt-6 w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-zinc-200 text-zinc-500 dark:border-zinc-800">
+            <tr className="border-b border-border text-muted-foreground">
               <th className="py-2 font-medium">Title</th>
               <th className="py-2 font-medium">Price</th>
               <th className="py-2 font-medium">Status</th>
@@ -54,7 +54,7 @@ export default async function ListingsPage() {
           </thead>
           <tbody>
             {listings.map((listing) => (
-              <tr key={listing.id} className="border-b border-zinc-100 dark:border-zinc-900">
+              <tr key={listing.id} className="border-b border-border/60">
                 <td className="py-3">
                   <Link href={`/dashboard/listings/${listing.id}/edit`} className="hover:underline">
                     {listing.title}
@@ -72,7 +72,7 @@ export default async function ListingsPage() {
                   </span>
                 </td>
                 <td className="py-3">
-                  <div className="flex gap-3 text-zinc-500">
+                  <div className="flex gap-3 text-muted-foreground">
                     {(listing.status === "draft" || listing.status === "archived") && (
                       <form action={submitForReview.bind(null, listing.id)}>
                         <button type="submit" className="hover:underline">
