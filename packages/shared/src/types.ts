@@ -1,11 +1,22 @@
 export type UserRole = "buyer" | "agent" | "owner" | "admin";
 
+export type VerificationStatus = "none" | "pending" | "verified" | "rejected";
+
 export interface AppUser {
   id: string;
   role: UserRole;
   phone: string;
   name: string;
   agencyId: string | null;
+  verificationStatus: VerificationStatus;
+}
+
+export interface PublicProfile {
+  id: string;
+  name: string;
+  role: UserRole;
+  agencyId: string | null;
+  verificationStatus: VerificationStatus;
 }
 
 export interface Agency {
@@ -29,9 +40,12 @@ export type PropertyType =
   | "apartment"
   | "land"
   | "commercial"
-  | "office";
+  | "office"
+  | "room";
 
 export type ListingStatus = "draft" | "pending_review" | "published" | "archived";
+
+export type RoadAccess = "paved" | "murram" | "footpath";
 
 export interface Listing {
   id: string;
@@ -51,6 +65,20 @@ export interface Listing {
   status: ListingStatus;
   featuredUntil: string | null;
   createdAt: string;
+  furnished: boolean | null;
+  hasParking: boolean;
+  hasWaterTank: boolean;
+  hasBackupPower: boolean;
+  hasBoysQuarters: boolean;
+  isFenced: boolean;
+  hasGarden: boolean;
+  hasFiberInternet: boolean;
+  roadAccess: RoadAccess | null;
+  advanceMonthsRequired: number | null;
+  viewCount: number;
+  whatsappClickCount: number;
+  expiresAt: string | null;
+  titleVerificationStatus: VerificationStatus;
 }
 
 export interface ListingPhoto {
@@ -60,6 +88,18 @@ export interface ListingPhoto {
   sortOrder: number;
 }
 
+export interface ListingVerification {
+  id: string;
+  listingId: string;
+  upiNumber: string | null;
+  titleDocumentUrl: string | null;
+  status: VerificationStatus;
+  reviewedBy: string | null;
+  reviewedAt: string | null;
+  notes: string | null;
+  createdAt: string;
+}
+
 export interface Inquiry {
   id: string;
   listingId: string;
@@ -67,5 +107,23 @@ export interface Inquiry {
   name: string;
   phone: string;
   message: string;
+  createdAt: string;
+}
+
+export interface Favorite {
+  userId: string;
+  listingId: string;
+  createdAt: string;
+}
+
+export type ListingReportStatus = "open" | "reviewed" | "dismissed";
+
+export interface ListingReport {
+  id: string;
+  listingId: string;
+  reporterId: string | null;
+  reason: string;
+  message: string | null;
+  status: ListingReportStatus;
   createdAt: string;
 }

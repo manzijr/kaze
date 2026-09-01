@@ -49,6 +49,20 @@ export default async function EditListingPage({
     status: row.status,
     featuredUntil: row.featured_until,
     createdAt: row.created_at,
+    furnished: row.furnished,
+    hasParking: row.has_parking,
+    hasWaterTank: row.has_water_tank,
+    hasBackupPower: row.has_backup_power,
+    hasBoysQuarters: row.has_boys_quarters,
+    isFenced: row.is_fenced,
+    hasGarden: row.has_garden,
+    hasFiberInternet: row.has_fiber_internet,
+    roadAccess: row.road_access,
+    advanceMonthsRequired: row.advance_months_required,
+    viewCount: row.view_count,
+    whatsappClickCount: row.whatsapp_click_count,
+    expiresAt: row.expires_at,
+    titleVerificationStatus: row.title_verification_status,
   };
 
   return (
