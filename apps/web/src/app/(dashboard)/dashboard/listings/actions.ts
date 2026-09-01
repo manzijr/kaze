@@ -114,3 +114,16 @@ export async function deleteListing(listingId: string) {
   if (error) throw new Error(error.message);
   revalidatePath("/dashboard/listings");
 }
+
+const LISTING_LIFETIME_DAYS = 60;
+
+export async function renewListing(listingId: string) {
+  const supabase = await createClient();
+  const expiresAt = new Date(Date.now() + LISTING_LIFETIME_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const { error } = await supabase
+    .from("listings")
+    .update({ expires_at: expiresAt })
+    .eq("id", listingId);
+  if (error) throw new Error(error.message);
+  revalidatePath("/dashboard/listings");
+}

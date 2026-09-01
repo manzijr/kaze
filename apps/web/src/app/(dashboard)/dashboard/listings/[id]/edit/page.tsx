@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Listing } from "@kaze/shared";
 import { createClient } from "@/lib/supabase/server";
 import { PhotoUploader } from "@/components/PhotoUploader";
+import { TitleVerificationCard } from "@/components/TitleVerificationCard";
 import { EditListingActions } from "./EditListingActions";
 
 export default async function EditListingPage({
@@ -12,7 +13,7 @@ export default async function EditListingPage({
   const { id } = await params;
   const supabase = await createClient();
 
-  const [{ data: row }, { data: locations }, { data: photos }] = await Promise.all([
+  const [{ data: row }, { data: locations }, { data: photos }, { data: verification }] = await Promise.all([
     supabase.from("listings").select("*").eq("id", id).single(),
     supabase
       .from("locations")
@@ -25,6 +26,11 @@ export default async function EditListingPage({
       .select("*")
       .eq("listing_id", id)
       .order("sort_order"),
+    supabase
+      .from("listing_verifications")
+      .select("id, upi_number, status, notes")
+      .eq("listing_id", id)
+      .maybeSingle(),
   ]);
 
   if (!row) {
@@ -74,6 +80,10 @@ export default async function EditListingPage({
         <div className="mt-2">
           <PhotoUploader listingId={id} initialPhotos={photos ?? []} />
         </div>
+      </div>
+
+      <div className="mt-6">
+        <TitleVerificationCard listingId={id} initial={verification ?? null} />
       </div>
 
       <EditListingActions listing={listing} locations={locations ?? []} />

@@ -20,7 +20,7 @@ export default async function DashboardLayout({
 
   const { data: profile } = await supabase
     .from("users")
-    .select("name, role")
+    .select("name, role, verification_status")
     .eq("id", user.id)
     .single();
 
@@ -44,13 +44,30 @@ export default async function DashboardLayout({
           <Link href="/dashboard/inquiries" className="text-muted-foreground transition hover:text-foreground">
             Inquiries
           </Link>
+          <Link href="/dashboard/verification" className="text-muted-foreground transition hover:text-foreground">
+            Verification
+          </Link>
           {profile.role === "admin" && (
-            <Link
-              href="/dashboard/moderation"
-              className="text-muted-foreground transition hover:text-foreground"
-            >
-              Moderation
-            </Link>
+            <>
+              <Link
+                href="/dashboard/moderation"
+                className="text-muted-foreground transition hover:text-foreground"
+              >
+                Moderation
+              </Link>
+              <Link
+                href="/dashboard/agent-verifications"
+                className="text-muted-foreground transition hover:text-foreground"
+              >
+                Agent Verifications
+              </Link>
+              <Link
+                href="/dashboard/title-verifications"
+                className="text-muted-foreground transition hover:text-foreground"
+              >
+                Title Verifications
+              </Link>
+            </>
           )}
         </nav>
         <div className="flex items-center gap-4 text-sm">
