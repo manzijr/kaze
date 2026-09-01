@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BedDouble, Bath, MapPin } from "lucide-react";
 import { TitleVerifiedBadge } from "./TrustBadges";
+import { FavoriteButton } from "./FavoriteButton";
 
 type LocationRef = { province: string; district: string; sector: string };
 
@@ -17,7 +18,15 @@ type CardListing = {
   listing_photos: { url: string; sort_order: number }[];
 };
 
-export function ListingCard({ listing }: { listing: CardListing }) {
+export function ListingCard({
+  listing,
+  currentUserId = null,
+  isFavorited = false,
+}: {
+  listing: CardListing;
+  currentUserId?: string | null;
+  isFavorited?: boolean;
+}) {
   const photo = [...listing.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
   const location = Array.isArray(listing.locations) ? listing.locations[0] : listing.locations;
 
@@ -42,6 +51,12 @@ export function ListingCard({ listing }: { listing: CardListing }) {
         <span className="absolute left-3 top-3 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-foreground shadow-sm backdrop-blur">
           {listing.listing_type === "rent" ? "For rent" : "For sale"}
         </span>
+        <FavoriteButton
+          listingId={listing.id}
+          userId={currentUserId}
+          initialFavorited={isFavorited}
+          className="absolute right-3 top-3"
+        />
       </div>
       <div className="p-4">
         <p className="text-lg font-bold">

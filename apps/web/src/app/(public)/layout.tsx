@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Home } from "lucide-react";
+import { Home, Heart } from "lucide-react";
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -11,12 +11,21 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
           </span>
           Kaze
         </Link>
-        <Link
-          href="/login"
-          className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
-        >
-          List your property
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/saved"
+            className="flex items-center gap-1.5 text-sm font-medium text-muted-foreground transition hover:text-foreground"
+          >
+            <Heart className="h-4 w-4" />
+            Saved
+          </Link>
+          <Link
+            href="/login"
+            className="rounded-full bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
+          >
+            List your property
+          </Link>
+        </div>
       </header>
       <main className="flex-1">{children}</main>
     </div>

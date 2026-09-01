@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { SearchFilters } from "@/components/SearchFilters";
 import { ListingCard } from "@/components/ListingCard";
 import { ListingsMap } from "@/components/ListingsMap";
+import { RecentlyViewedRail } from "@/components/RecentlyViewedRail";
 
 type SearchParams = Record<string, string | string[] | undefined>;
 
@@ -73,7 +74,11 @@ export default async function HomePage({
   if (filters.furnished) listingsQuery = listingsQuery.eq("furnished", filters.furnished === "true");
   if (filters.verified_only) listingsQuery = listingsQuery.eq("title_verification_status", "verified");
 
-  const [{ data: listings }, { data: locations }] = await Promise.all([
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [{ data: listings }, { data: locations }, { data: favorites }] = await Promise.all([
     listingsQuery,
     supabase
       .from("locations")
@@ -81,7 +86,12 @@ export default async function HomePage({
       .order("province")
       .order("district")
       .order("sector"),
+    user
+      ? supabase.from("favorites").select("listing_id").eq("user_id", user.id)
+      : Promise.resolve({ data: [] as { listing_id: string }[] }),
   ]);
+
+  const favoritedIds = new Set((favorites ?? []).map((f) => f.listing_id));
 
   return (
     <div className="px-6 py-6">
@@ -89,6 +99,7 @@ export default async function HomePage({
 
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[1fr_440px]">
         <div>
+          <RecentlyViewedRail />
           <p className="mb-4 text-sm text-muted-foreground">
             {listings?.length ?? 0} {listings?.length === 1 ? "home" : "homes"} found
           </p>
@@ -100,7 +111,12 @@ export default async function HomePage({
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
               {listings.map((listing) => (
-                <ListingCard key={listing.id} listing={listing} />
+                <ListingCard
+                  key={listing.id}
+                  listing={listing}
+                  currentUserId={user?.id ?? null}
+                  isFavorited={favoritedIds.has(listing.id)}
+                />
               ))}
             </div>
           )}

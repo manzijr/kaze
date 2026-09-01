@@ -67,6 +67,9 @@ export default async function DashboardLayout({
               >
                 Title Verifications
               </Link>
+              <Link href="/dashboard/reports" className="text-muted-foreground transition hover:text-foreground">
+                Reports
+              </Link>
             </>
           )}
         </nav>

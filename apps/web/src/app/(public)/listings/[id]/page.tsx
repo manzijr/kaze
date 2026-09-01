@@ -19,6 +19,9 @@ import { ListingsMap } from "@/components/ListingsMap";
 import { ContactAgentForm } from "@/components/ContactAgentForm";
 import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { TitleVerifiedBadge, VerifiedAgentBadge } from "@/components/TrustBadges";
+import { FavoriteButton } from "@/components/FavoriteButton";
+import { ReportListingLink } from "@/components/ReportListingLink";
+import { RecentlyViewedTracker } from "@/components/RecentlyViewedTracker";
 
 type Props = { params: Promise<{ id: string }> };
 
@@ -77,9 +80,16 @@ export default async function ListingDetailPage({ params }: Props) {
   // Best-effort view counter; never let this block rendering.
   await supabase.rpc("increment_listing_view", { p_listing_id: id });
 
-  const [{ data: owner }, { data: phone }] = await Promise.all([
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const [{ data: owner }, { data: phone }, { data: favorite }] = await Promise.all([
     supabase.from("public_profiles").select("name, verification_status").eq("id", listing.owner_id).single(),
     supabase.rpc("get_listing_contact_phone", { p_listing_id: id }),
+    user
+      ? supabase.from("favorites").select("user_id").eq("user_id", user.id).eq("listing_id", id).maybeSingle()
+      : Promise.resolve({ data: null }),
   ]);
 
   const origin = (await headers()).get("origin") ?? "";
@@ -115,9 +125,18 @@ export default async function ListingDetailPage({ params }: Props) {
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <RecentlyViewedTracker
+        item={{
+          id: listing.id,
+          title: listing.title,
+          price: listing.price,
+          currency: listing.currency,
+          photoUrl: photos[0]?.url ?? null,
+        }}
+      />
 
       {hero && (
-        <div className="grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
+        <div className="relative grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
           {/* eslint-disable-next-line @next/next/no-img-element -- remote, user-uploaded listing photos */}
           <img
             src={hero.url}
@@ -133,6 +152,12 @@ export default async function ListingDetailPage({ params }: Props) {
               className="aspect-square h-full w-full object-cover"
             />
           ))}
+          <FavoriteButton
+            listingId={listing.id}
+            userId={user?.id ?? null}
+            initialFavorited={Boolean(favorite)}
+            className="absolute right-3 top-3"
+          />
         </div>
       )}
 
@@ -269,6 +294,8 @@ export default async function ListingDetailPage({ params }: Props) {
                 <ContactAgentForm listingId={listing.id} />
               </div>
             </div>
+
+            <ReportListingLink listingId={listing.id} />
           </div>
         </div>
       </div>
