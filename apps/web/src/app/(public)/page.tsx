@@ -24,6 +24,8 @@ export default async function HomePage({
     min_bedrooms: first(raw.min_bedrooms),
     min_price: first(raw.min_price),
     max_price: first(raw.max_price),
+    furnished: first(raw.furnished),
+    verified_only: first(raw.verified_only),
   };
 
   const supabase = await createClient();
@@ -41,12 +43,18 @@ export default async function HomePage({
     locationIds = (matches ?? []).map((m) => m.id);
   }
 
+  const nowIso = new Date().toISOString();
+
   let listingsQuery = supabase
     .from("listings")
     .select(
-      "id, title, price, currency, listing_type, property_type, bedrooms, bathrooms, lat, lng, locations(province, district, sector), listing_photos(url, sort_order)",
+      "id, title, price, currency, listing_type, property_type, bedrooms, bathrooms, lat, lng, title_verification_status, locations(province, district, sector), listing_photos(url, sort_order)",
     )
     .eq("status", "published")
+    // Listings expire 60 days after being published; treat a null
+    // expires_at (shouldn't happen for published rows, but be defensive)
+    // as not-yet-expired rather than hiding it.
+    .or(`expires_at.is.null,expires_at.gt.${nowIso}`)
     .order("created_at", { ascending: false });
 
   if (locationIds) {
@@ -62,6 +70,8 @@ export default async function HomePage({
     listingsQuery = listingsQuery.gte("bedrooms", Number(filters.min_bedrooms));
   if (filters.min_price) listingsQuery = listingsQuery.gte("price", Number(filters.min_price));
   if (filters.max_price) listingsQuery = listingsQuery.lte("price", Number(filters.max_price));
+  if (filters.furnished) listingsQuery = listingsQuery.eq("furnished", filters.furnished === "true");
+  if (filters.verified_only) listingsQuery = listingsQuery.eq("title_verification_status", "verified");
 
   const [{ data: listings }, { data: locations }] = await Promise.all([
     listingsQuery,

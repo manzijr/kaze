@@ -47,6 +47,12 @@ export type ListingStatus = "draft" | "pending_review" | "published" | "archived
 
 export type RoadAccess = "paved" | "murram" | "footpath";
 
+export type YearBuiltRange = "under_5" | "5_to_15" | "over_15";
+
+export type FinishQuality = "basic" | "standard" | "high_end";
+
+export type ClosedStatus = "sold" | "rented" | "withdrawn";
+
 export interface Listing {
   id: string;
   ownerId: string;
@@ -79,6 +85,13 @@ export interface Listing {
   whatsappClickCount: number;
   expiresAt: string | null;
   titleVerificationStatus: VerificationStatus;
+  plotSizeSqm: number | null;
+  floors: number | null;
+  yearBuiltRange: YearBuiltRange | null;
+  finishQuality: FinishQuality | null;
+  closedStatus: ClosedStatus | null;
+  achievedPrice: number | null;
+  closedAt: string | null;
 }
 
 export interface ListingPhoto {

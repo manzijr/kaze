@@ -1,19 +1,35 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import type { Metadata } from "next";
-import { BedDouble, Bath, Ruler, MapPin } from "lucide-react";
+import {
+  BedDouble,
+  Bath,
+  Ruler,
+  MapPin,
+  Layers,
+  Car,
+  Droplets,
+  Zap,
+  Home as HomeIcon,
+  Trees,
+  Wifi,
+} from "lucide-react";
 import { createClient } from "@/lib/supabase/server";
 import { ListingsMap } from "@/components/ListingsMap";
 import { ContactAgentForm } from "@/components/ContactAgentForm";
+import { WhatsAppButton } from "@/components/WhatsAppButton";
+import { TitleVerifiedBadge, VerifiedAgentBadge } from "@/components/TrustBadges";
 
 type Props = { params: Promise<{ id: string }> };
+
+const LISTING_FIELDS =
+  "id, title, description, price, currency, listing_type, property_type, bedrooms, bathrooms, size_sqm, plot_size_sqm, floors, lat, lng, owner_id, title_verification_status, furnished, has_parking, has_water_tank, has_backup_power, has_boys_quarters, is_fenced, has_garden, has_fiber_internet, road_access, advance_months_required, locations(province, district, sector), listing_photos(url, sort_order)";
 
 async function getListing(id: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from("listings")
-    .select(
-      "id, title, description, price, currency, listing_type, property_type, bedrooms, bathrooms, size_sqm, lat, lng, locations(province, district, sector), listing_photos(url, sort_order)",
-    )
+    .select(LISTING_FIELDS)
     .eq("id", id)
     .eq("status", "published")
     .single();
@@ -39,20 +55,67 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
+const amenityIcons: { key: string; label: string; Icon: typeof Car }[] = [
+  { key: "has_parking", label: "Parking", Icon: Car },
+  { key: "has_water_tank", label: "Water tank", Icon: Droplets },
+  { key: "has_backup_power", label: "Backup power", Icon: Zap },
+  { key: "has_boys_quarters", label: "Boys' quarters", Icon: HomeIcon },
+  { key: "is_fenced", label: "Fenced compound", Icon: HomeIcon },
+  { key: "has_garden", label: "Garden", Icon: Trees },
+  { key: "has_fiber_internet", label: "Fiber internet", Icon: Wifi },
+];
+
 export default async function ListingDetailPage({ params }: Props) {
   const { id } = await params;
+  const supabase = await createClient();
   const listing = await getListing(id);
 
   if (!listing) {
     notFound();
   }
 
+  // Best-effort view counter; never let this block rendering.
+  await supabase.rpc("increment_listing_view", { p_listing_id: id });
+
+  const [{ data: owner }, { data: phone }] = await Promise.all([
+    supabase.from("public_profiles").select("name, verification_status").eq("id", listing.owner_id).single(),
+    supabase.rpc("get_listing_contact_phone", { p_listing_id: id }),
+  ]);
+
+  const origin = (await headers()).get("origin") ?? "";
+  const listingUrl = `${origin}/listings/${id}`;
+
   const location = Array.isArray(listing.locations) ? listing.locations[0] : listing.locations;
   const photos = [...listing.listing_photos].sort((a, b) => a.sort_order - b.sort_order);
   const [hero, ...rest] = photos;
+  const activeAmenities = amenityIcons.filter((a) => (listing as unknown as Record<string, boolean>)[a.key]);
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "RealEstateListing",
+    name: listing.title,
+    description: listing.description,
+    url: listingUrl,
+    image: photos.map((p) => p.url),
+    offers: {
+      "@type": "Offer",
+      price: listing.price,
+      priceCurrency: listing.currency,
+    },
+    address: location
+      ? {
+          "@type": "PostalAddress",
+          addressRegion: location.province,
+          addressLocality: location.district,
+          addressCountry: "RW",
+        }
+      : undefined,
+  };
 
   return (
     <div className="mx-auto max-w-5xl px-6 py-8">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
       {hero && (
         <div className="grid grid-cols-4 grid-rows-2 gap-2 overflow-hidden rounded-xl">
           {/* eslint-disable-next-line @next/next/no-img-element -- remote, user-uploaded listing photos */}
@@ -88,6 +151,17 @@ export default async function ListingDetailPage({ params }: Props) {
               {location.sector}, {location.district}, {location.province}
             </p>
           )}
+          {listing.title_verification_status === "verified" && (
+            <div className="mt-2">
+              <TitleVerifiedBadge />
+            </div>
+          )}
+          {listing.listing_type === "rent" && listing.advance_months_required != null && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              {listing.advance_months_required} month{listing.advance_months_required === 1 ? "" : "s"} advance
+              required
+            </p>
+          )}
 
           <div className="mt-5 flex flex-wrap gap-6 rounded-xl border border-border bg-muted/50 px-5 py-4">
             {listing.bedrooms != null && (
@@ -102,13 +176,47 @@ export default async function ListingDetailPage({ params }: Props) {
                 <span className="text-sm font-medium">{listing.bathrooms} bath</span>
               </div>
             )}
+            {listing.floors != null && (
+              <div className="flex items-center gap-2">
+                <Layers className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">{listing.floors} floor{listing.floors === 1 ? "" : "s"}</span>
+              </div>
+            )}
             {listing.size_sqm != null && (
               <div className="flex items-center gap-2">
                 <Ruler className="h-5 w-5 text-primary" />
-                <span className="text-sm font-medium">{listing.size_sqm} sqm</span>
+                <span className="text-sm font-medium">{listing.size_sqm} sqm built</span>
+              </div>
+            )}
+            {listing.plot_size_sqm != null && (
+              <div className="flex items-center gap-2">
+                <Ruler className="h-5 w-5 text-primary" />
+                <span className="text-sm font-medium">{listing.plot_size_sqm} sqm plot</span>
               </div>
             )}
           </div>
+
+          {(activeAmenities.length > 0 || listing.road_access || listing.furnished != null) && (
+            <>
+              <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+                Amenities &amp; infrastructure
+              </h2>
+              <div className="mt-3 flex flex-wrap gap-4">
+                {listing.furnished != null && (
+                  <span className="text-sm">{listing.furnished ? "Furnished" : "Unfurnished"}</span>
+                )}
+                {listing.road_access && (
+                  <span className="text-sm capitalize">{listing.road_access.replace("_", " ")} road</span>
+                )}
+                {activeAmenities.map(({ key, label, Icon }) => (
+                  <span key={key} className="flex items-center gap-1.5 text-sm">
+                    <Icon className="h-4 w-4 text-primary" />
+                    {label}
+                  </span>
+                ))}
+              </div>
+            </>
+          )}
 
           <h2 className="mt-8 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             About this home
@@ -134,13 +242,32 @@ export default async function ListingDetailPage({ params }: Props) {
         </div>
 
         <div>
-          <div className="sticky top-20 rounded-xl border border-border bg-surface p-5 shadow-sm">
-            <h2 className="text-sm font-semibold">Interested in this property?</h2>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Send a message and the owner or agent will contact you directly.
-            </p>
-            <div className="mt-4">
-              <ContactAgentForm listingId={listing.id} />
+          <div className="sticky top-20 space-y-4">
+            <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+              <div className="flex items-center justify-between">
+                <p className="text-sm font-medium">{owner?.name ?? "Listed by owner"}</p>
+                {owner?.verification_status === "verified" && <VerifiedAgentBadge />}
+              </div>
+              {phone && (
+                <div className="mt-3">
+                  <WhatsAppButton
+                    listingId={listing.id}
+                    phone={phone}
+                    listingTitle={listing.title}
+                    listingUrl={listingUrl}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="rounded-xl border border-border bg-surface p-5 shadow-sm">
+              <h2 className="text-sm font-semibold">Or send a message</h2>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Prefer not to share your number yet? Send a request instead.
+              </p>
+              <div className="mt-4">
+                <ContactAgentForm listingId={listing.id} />
+              </div>
             </div>
           </div>
         </div>

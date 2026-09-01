@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal } from "lucide-react";
 import type { Location } from "@kaze/shared";
 
 const pillClass =
@@ -17,6 +17,7 @@ export function SearchFilters({
   const [province, setProvince] = useState(values.province ?? "");
   const [district, setDistrict] = useState(values.district ?? "");
   const [sector, setSector] = useState(values.sector ?? "");
+  const [showMore, setShowMore] = useState(Boolean(values.furnished || values.verified_only));
 
   const provinces = useMemo(() => [...new Set(locations.map((l) => l.province))].sort(), [locations]);
 
@@ -54,6 +55,7 @@ export function SearchFilters({
         <option value="">Any property type</option>
         <option value="house">House</option>
         <option value="apartment">Apartment</option>
+        <option value="room">Room</option>
         <option value="land">Land</option>
         <option value="commercial">Commercial</option>
         <option value="office">Office</option>
@@ -136,12 +138,44 @@ export function SearchFilters({
       />
 
       <button
+        type="button"
+        onClick={() => setShowMore((v) => !v)}
+        className={`flex items-center gap-1.5 ${pillClass}`}
+      >
+        <SlidersHorizontal className="h-4 w-4" />
+        More filters
+      </button>
+
+      <button
         type="submit"
         className="ml-auto flex items-center gap-1.5 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition hover:bg-primary-hover"
       >
         <Search className="h-4 w-4" strokeWidth={2.5} />
         Search
       </button>
+
+      {showMore && (
+        <div className="flex w-full flex-wrap items-center gap-4 border-t border-border pt-3">
+          <label className="flex items-center gap-2 text-sm">
+            <span className="text-muted-foreground">Furnished</span>
+            <select name="furnished" defaultValue={values.furnished ?? ""} className={pillClass}>
+              <option value="">Any</option>
+              <option value="true">Furnished</option>
+              <option value="false">Unfurnished</option>
+            </select>
+          </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              name="verified_only"
+              value="true"
+              defaultChecked={values.verified_only === "true"}
+              className="h-4 w-4 rounded border-border"
+            />
+            Title-verified only
+          </label>
+        </div>
+      )}
     </form>
   );
 }

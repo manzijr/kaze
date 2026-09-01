@@ -7,11 +7,18 @@ import { createClient } from "@/lib/supabase/server";
 type FormState = { error: string | null };
 
 function parseListingFields(formData: FormData) {
-  const bedrooms = formData.get("bedrooms");
-  const bathrooms = formData.get("bathrooms");
-  const sizeSqm = formData.get("size_sqm");
-  const lat = formData.get("lat");
-  const lng = formData.get("lng");
+  const num = (key: string) => {
+    const v = formData.get(key);
+    return v && String(v).trim() !== "" ? Number(v) : null;
+  };
+  const str = (key: string) => {
+    const v = String(formData.get(key) ?? "").trim();
+    return v || null;
+  };
+  const bool = (key: string) => {
+    const v = String(formData.get(key) ?? "");
+    return v === "" ? null : v === "true";
+  };
 
   return {
     title: String(formData.get("title") ?? "").trim(),
@@ -20,12 +27,26 @@ function parseListingFields(formData: FormData) {
     currency: String(formData.get("currency") ?? "RWF"),
     listing_type: String(formData.get("listing_type") ?? ""),
     property_type: String(formData.get("property_type") ?? ""),
-    bedrooms: bedrooms ? Number(bedrooms) : null,
-    bathrooms: bathrooms ? Number(bathrooms) : null,
-    size_sqm: sizeSqm ? Number(sizeSqm) : null,
+    bedrooms: num("bedrooms"),
+    bathrooms: num("bathrooms"),
+    size_sqm: num("size_sqm"),
     location_id: String(formData.get("location_id") ?? ""),
-    lat: lat ? Number(lat) : null,
-    lng: lng ? Number(lng) : null,
+    lat: num("lat"),
+    lng: num("lng"),
+    advance_months_required: num("advance_months_required"),
+    floors: num("floors"),
+    plot_size_sqm: num("plot_size_sqm"),
+    furnished: bool("furnished"),
+    year_built_range: str("year_built_range"),
+    finish_quality: str("finish_quality"),
+    road_access: str("road_access"),
+    has_parking: formData.get("has_parking") === "on",
+    has_water_tank: formData.get("has_water_tank") === "on",
+    has_backup_power: formData.get("has_backup_power") === "on",
+    has_boys_quarters: formData.get("has_boys_quarters") === "on",
+    is_fenced: formData.get("is_fenced") === "on",
+    has_garden: formData.get("has_garden") === "on",
+    has_fiber_internet: formData.get("has_fiber_internet") === "on",
   };
 }
 
@@ -126,4 +147,23 @@ export async function renewListing(listingId: string) {
     .eq("id", listingId);
   if (error) throw new Error(error.message);
   revalidatePath("/dashboard/listings");
+}
+
+export async function updateListingOutcome(listingId: string, formData: FormData) {
+  const closedStatus = String(formData.get("closed_status") ?? "").trim();
+  const achievedPriceRaw = formData.get("achieved_price");
+  const achievedPrice =
+    achievedPriceRaw && String(achievedPriceRaw).trim() !== "" ? Number(achievedPriceRaw) : null;
+
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from("listings")
+    .update({
+      closed_status: closedStatus || null,
+      achieved_price: achievedPrice,
+      closed_at: closedStatus ? new Date().toISOString() : null,
+    })
+    .eq("id", listingId);
+  if (error) throw new Error(error.message);
+  revalidatePath(`/dashboard/listings/${listingId}/edit`);
 }

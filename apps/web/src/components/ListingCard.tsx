@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BedDouble, Bath, MapPin } from "lucide-react";
+import { TitleVerifiedBadge } from "./TrustBadges";
 
 type LocationRef = { province: string; district: string; sector: string };
 
@@ -11,6 +12,7 @@ type CardListing = {
   listing_type: string;
   bedrooms: number | null;
   bathrooms: number | null;
+  title_verification_status?: string | null;
   locations: LocationRef | LocationRef[] | null;
   listing_photos: { url: string; sort_order: number }[];
 };
@@ -49,6 +51,11 @@ export function ListingCard({ listing }: { listing: CardListing }) {
           )}
         </p>
         <p className="mt-1 truncate text-sm font-medium">{listing.title}</p>
+        {listing.title_verification_status === "verified" && (
+          <div className="mt-1.5">
+            <TitleVerifiedBadge />
+          </div>
+        )}
         <div className="mt-2 flex items-center gap-3 text-sm text-muted-foreground">
           {listing.bedrooms != null && (
             <span className="flex items-center gap-1">
