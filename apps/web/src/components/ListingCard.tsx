@@ -1,5 +1,6 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BedDouble, Bath, MapPin } from "lucide-react";
+import { getTranslations } from "next-intl/server";
 import { TitleVerifiedBadge } from "./TrustBadges";
 import { FavoriteButton } from "./FavoriteButton";
 
@@ -18,7 +19,7 @@ type CardListing = {
   listing_photos: { url: string; sort_order: number }[];
 };
 
-export function ListingCard({
+export async function ListingCard({
   listing,
   currentUserId = null,
   isFavorited = false,
@@ -27,6 +28,7 @@ export function ListingCard({
   currentUserId?: string | null;
   isFavorited?: boolean;
 }) {
+  const t = await getTranslations("listingCard");
   const photo = [...listing.listing_photos].sort((a, b) => a.sort_order - b.sort_order)[0];
   const location = Array.isArray(listing.locations) ? listing.locations[0] : listing.locations;
 
@@ -45,11 +47,11 @@ export function ListingCard({
           />
         ) : (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
-            No photo yet
+            {t("noPhoto")}
           </div>
         )}
         <span className="absolute left-3 top-3 rounded-full bg-surface/90 px-2.5 py-1 text-xs font-semibold uppercase tracking-wide text-foreground shadow-sm backdrop-blur">
-          {listing.listing_type === "rent" ? "For rent" : "For sale"}
+          {listing.listing_type === "rent" ? t("forRent") : t("forSale")}
         </span>
         <FavoriteButton
           listingId={listing.id}
@@ -62,7 +64,7 @@ export function ListingCard({
         <p className="text-lg font-bold">
           {listing.price.toLocaleString()} {listing.currency}
           {listing.listing_type === "rent" && (
-            <span className="text-sm font-normal text-muted-foreground">/mo</span>
+            <span className="text-sm font-normal text-muted-foreground">{t("perMonth")}</span>
           )}
         </p>
         <p className="mt-1 truncate text-sm font-medium">{listing.title}</p>

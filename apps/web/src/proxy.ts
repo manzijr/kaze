@@ -1,8 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import createMiddleware from "next-intl/middleware";
+import { type NextRequest } from "next/server";
+import { routing } from "@/i18n/routing";
+
+const handleI18nRouting = createMiddleware(routing);
 
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  // Resolve the locale (prefix/redirect/rewrite as needed) first; this
+  // becomes the response we return, with the Supabase session-refresh
+  // cookies layered on top of it below.
+  const response = handleI18nRouting(request);
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -16,7 +23,6 @@ export async function proxy(request: NextRequest) {
           for (const { name, value } of cookiesToSet) {
             request.cookies.set(name, value);
           }
-          response = NextResponse.next({ request });
           for (const { name, value, options } of cookiesToSet) {
             response.cookies.set(name, value, options);
           }
@@ -32,5 +38,8 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
+  // /auth/callback is a Supabase redirect-URL target (allowlisted in the
+  // Supabase dashboard) and isn't locale-prefixed -- keep it out of
+  // next-intl's routing entirely.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|auth/callback).*)"],
 };

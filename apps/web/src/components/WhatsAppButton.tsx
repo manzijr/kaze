@@ -1,6 +1,7 @@
 "use client";
 
 import { MessageCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 export function WhatsAppButton({
@@ -14,8 +15,9 @@ export function WhatsAppButton({
   listingTitle: string;
   listingUrl: string;
 }) {
+  const t = useTranslations("whatsapp");
   const digits = phone.replace(/[^\d]/g, "");
-  const message = `Hello, I'm interested in ${listingTitle} — ${listingUrl}`;
+  const message = t("message", { title: listingTitle, url: listingUrl });
   const href = `https://wa.me/${digits}?text=${encodeURIComponent(message)}`;
 
   function handleClick() {
@@ -32,7 +34,7 @@ export function WhatsAppButton({
       className="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-95"
     >
       <MessageCircle className="h-4 w-4" />
-      Chat on WhatsApp
+      {t("chatButton")}
     </a>
   );
 }

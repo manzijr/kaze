@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { Heart } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 
 export function FavoriteButton({
@@ -16,6 +17,7 @@ export function FavoriteButton({
   initialFavorited: boolean;
   className?: string;
 }) {
+  const t = useTranslations("favorite");
   const [favorited, setFavorited] = useState(initialFavorited);
   const [pending, setPending] = useState(false);
   const router = useRouter();
@@ -46,7 +48,7 @@ export function FavoriteButton({
       type="button"
       onClick={toggle}
       disabled={pending}
-      aria-label={favorited ? "Remove from saved" : "Save listing"}
+      aria-label={favorited ? t("remove") : t("save")}
       className={`flex h-8 w-8 items-center justify-center rounded-full bg-surface/90 shadow-sm backdrop-blur transition hover:scale-105 disabled:opacity-50 ${className}`}
     >
       <Heart

@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { readRecentlyViewed, type RecentlyViewedItem } from "@/lib/recentlyViewed";
 
 export function RecentlyViewedRail() {
+  const t = useTranslations("recentlyViewed");
   const [items, setItems] = useState<RecentlyViewedItem[]>([]);
 
   useEffect(() => {
@@ -20,7 +22,7 @@ export function RecentlyViewedRail() {
   return (
     <div className="mb-6">
       <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
-        Recently viewed
+        {t("heading")}
       </h2>
       <div className="flex gap-3 overflow-x-auto pb-2">
         {items.map((item) => (

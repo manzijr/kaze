@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { loadGoogleMaps } from "@/lib/googleMaps";
 
 const DEFAULT_CENTER = { lat: -1.9441, lng: 30.0619 }; // Kigali

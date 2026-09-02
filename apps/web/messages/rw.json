@@ -1,0 +1,147 @@
+{
+  "common": {
+    "appName": "Kaze",
+    "language": "Ururimi",
+    "english": "Icyongereza",
+    "kinyarwanda": "Ikinyarwanda"
+  },
+  "nav": {
+    "saved": "Ibyabitswe",
+    "listYourProperty": "Andika umutungo wawe"
+  },
+  "search": {
+    "anyTransaction": "Kugurisha cyangwa gukodesha",
+    "forRent": "Gukodeshwa",
+    "forSale": "Kugurishwa",
+    "anyPropertyType": "Ubwoko bwose bw'umutungo",
+    "house": "Inzu",
+    "apartment": "Apartimani",
+    "room": "Icyumba",
+    "land": "Ubutaka",
+    "commercial": "Ubucuruzi",
+    "office": "Ibiro",
+    "anyProvince": "Intara zose",
+    "anyDistrict": "Uturere twose",
+    "anySector": "Imirenge yose",
+    "anyBedrooms": "Ibyumba byose",
+    "bedroomsPlus": "Byumba {count}+",
+    "minPrice": "Igiciro gito",
+    "maxPrice": "Igiciro kinini",
+    "moreFilters": "Ibindi bishungura",
+    "search": "Shakisha",
+    "furnished": "Birimo ibikoresho",
+    "any": "Byose",
+    "furnishedOption": "Birimo ibikoresho",
+    "unfurnishedOption": "Nta bikoresho birimo",
+    "titleVerifiedOnly": "Ibyemejwe ku mpapuro gusa"
+  },
+  "home": {
+    "homesFound": "{count, plural, one {# umutungo wabonetse} other {# imitungo yabonetse}}",
+    "noResultsTitle": "Nta mutungo uhuye n'ibyo ushaka",
+    "noResultsBody": "Gerageza gukuraho bimwe mu bishungura."
+  },
+  "listingCard": {
+    "forRent": "Gukodeshwa",
+    "forSale": "Kugurishwa",
+    "noPhoto": "Nta foto irahari",
+    "perMonth": "/ukwezi"
+  },
+  "listingDetail": {
+    "perMonth": "/ukwezi",
+    "advanceRequired": "{count, plural, one {Hasabwa ukwezi # k'imbere} other {Hasabwa amezi # y'imbere}}",
+    "bed": "icyumba",
+    "bath": "ubwogero",
+    "floor": "{count, plural, one {# igorofa} other {# amagorofa}}",
+    "sqmBuilt": "m² yubatswe",
+    "sqmPlot": "m² z'ubutaka",
+    "amenitiesHeading": "Ibikoresho n'imiyoborere",
+    "furnished": "Birimo ibikoresho",
+    "unfurnished": "Nta bikoresho birimo",
+    "roadAccess": "Umuhanda {type}",
+    "aboutHeading": "Ibijyanye n'iyi nzu",
+    "listedByOwner": "Byashyizweho na nyir'umutungo",
+    "sendMessageHeading": "Cyangwa ohereza ubutumwa",
+    "sendMessageBody": "Ntushaka gutanga nomero yawe? Ohereza ubusabe aho."
+  },
+  "amenities": {
+    "has_parking": "Ahantu ho gupaka imodoka",
+    "has_water_tank": "Ikigega cy'amazi",
+    "has_backup_power": "Amashanyarazi y'inyongera",
+    "has_boys_quarters": "Icyumba cy'abakozi",
+    "is_fenced": "Hirya y'urukuta",
+    "has_garden": "Ubusitani",
+    "has_fiber_internet": "Interineti ya fibre"
+  },
+  "roadAccess": {
+    "paved": "Wubatswe",
+    "murram": "W'ibuye",
+    "footpath": "Inzira y'amaguru"
+  },
+  "trustBadges": {
+    "titleVerified": "Impapuro Zemejwe",
+    "titleVerifiedTooltip": "Inyandiko z'ubwiyunge z'uyu mutungo zasuzumwe n'itsinda ryacu. Kwemeza bivuze ko inyandiko zatanzwe zihuye n'umutungo, ntibisobanura ko igurisha ubwaryo nta byago birimo — buri gihe kora ubushakashatsi bwawe bwite.",
+    "verifiedAgent": "Umuhuza Wemejwe",
+    "verifiedAgentTooltip": "Uyu muhuza/nyir'umutungo yatanze indangamuntu (n'icyemezo cy'ubucuruzi, niba ari ikigo) kugira ngo isuzumwe n'itsinda ryacu."
+  },
+  "whatsapp": {
+    "chatButton": "Vugana kuri WhatsApp",
+    "message": "Muraho, nshishikajwe na {title} — {url}"
+  },
+  "favorite": {
+    "save": "Bika iyi nzu",
+    "remove": "Kuraho ku byabitswe"
+  },
+  "recentlyViewed": {
+    "heading": "Ibyasuwe vuba"
+  },
+  "saved": {
+    "heading": "Imitungo yabitswe",
+    "empty": "Ntabwo warabika umutungo n'umwe — kanda ku mutima ku mutungo kugira ngo uwubike hano."
+  },
+  "contactForm": {
+    "namePlaceholder": "Amazina yawe",
+    "phonePlaceholder": "Nomero ya telefone yawe",
+    "defaultMessage": "Muraho, ese uyu mutungo uracyahari? Nifuza gushyiraho igihe cyo kuwureba.",
+    "sentMessage": "Ubutumwa bwoherejwe — nyir'umutungo cyangwa umuhuza azaguhamagara.",
+    "sending": "Kohereza…",
+    "submit": "Vugana n'umuhuza",
+    "errorRequired": "Uzuza amazina yawe, telefone, n'ubutumwa."
+  },
+  "reportForm": {
+    "reportLink": "Menyesha kuri uyu mutungo",
+    "reasonPlaceholder": "Kuki utanga iri menyesha?",
+    "reasonFraud": "Ushinja uburiganya cyangwa uburyarya",
+    "reasonWrongInfo": "Amakuru atari yo",
+    "reasonAlreadySold": "Byamaze kugurishwa/gukodeshwa",
+    "reasonDuplicate": "Umutungo wasubiwemo",
+    "reasonOther": "Ikindi",
+    "detailsPlaceholder": "Ibisobanuro by'inyongera (si ngombwa)",
+    "sending": "Kohereza…",
+    "submit": "Ohereza iri menyesha",
+    "sentMessage": "Murakoze — tuzasuzuma uyu mutungo.",
+    "errorReasonRequired": "Hitamo impamvu."
+  },
+  "auth": {
+    "signInHeading": "Injira muri Kaze",
+    "signInBody": "Kubaturage n'abanyir'imitungo. Tuzakohereza ihuza ryo kwinjira kuri imeyili yawe.",
+    "checkEmail": "Reba imeyili yawe uhabone ihuza ryo kwinjira.",
+    "emailLabel": "Imeyili",
+    "emailPlaceholder": "wowe@urugero.com",
+    "sending": "Kohereza…",
+    "sendLink": "Ohereza ihuza ryo kwinjira",
+    "errorEmailRequired": "Andika imeyili yawe."
+  },
+  "onboarding": {
+    "heading": "Uzuza umwirondoro wawe",
+    "body": "Intambwe imwe isigaye mbere yo gutangira gutanga imitungo.",
+    "fullName": "Amazina yombi",
+    "phoneNumber": "Nomero ya telefone",
+    "phonePlaceholder": "+250 7xx xxx xxx",
+    "iAmA": "Ndi...",
+    "propertyOwner": "Nyir'umutungo",
+    "agent": "Umuhuza",
+    "saving": "Kubika…",
+    "continue": "Komeza",
+    "errorRequired": "Uzuza amazina yawe, nomero ya telefone, n'ubwoko bw'ikonti."
+  }
+}

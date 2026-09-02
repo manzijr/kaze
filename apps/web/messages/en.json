@@ -1,0 +1,147 @@
+{
+  "common": {
+    "appName": "Kaze",
+    "language": "Language",
+    "english": "English",
+    "kinyarwanda": "Kinyarwanda"
+  },
+  "nav": {
+    "saved": "Saved",
+    "listYourProperty": "List your property"
+  },
+  "search": {
+    "anyTransaction": "For sale or rent",
+    "forRent": "For rent",
+    "forSale": "For sale",
+    "anyPropertyType": "Any property type",
+    "house": "House",
+    "apartment": "Apartment",
+    "room": "Room",
+    "land": "Land",
+    "commercial": "Commercial",
+    "office": "Office",
+    "anyProvince": "Any province",
+    "anyDistrict": "Any district",
+    "anySector": "Any sector",
+    "anyBedrooms": "Any bedrooms",
+    "bedroomsPlus": "{count}+ bd",
+    "minPrice": "Min price",
+    "maxPrice": "Max price",
+    "moreFilters": "More filters",
+    "search": "Search",
+    "furnished": "Furnished",
+    "any": "Any",
+    "furnishedOption": "Furnished",
+    "unfurnishedOption": "Unfurnished",
+    "titleVerifiedOnly": "Title-verified only"
+  },
+  "home": {
+    "homesFound": "{count, plural, one {# home found} other {# homes found}}",
+    "noResultsTitle": "No listings match your search",
+    "noResultsBody": "Try widening your filters."
+  },
+  "listingCard": {
+    "forRent": "For rent",
+    "forSale": "For sale",
+    "noPhoto": "No photo yet",
+    "perMonth": "/mo"
+  },
+  "listingDetail": {
+    "perMonth": "/mo",
+    "advanceRequired": "{count, plural, one {# month advance required} other {# months advance required}}",
+    "bed": "bed",
+    "bath": "bath",
+    "floor": "{count, plural, one {# floor} other {# floors}}",
+    "sqmBuilt": "sqm built",
+    "sqmPlot": "sqm plot",
+    "amenitiesHeading": "Amenities & infrastructure",
+    "furnished": "Furnished",
+    "unfurnished": "Unfurnished",
+    "roadAccess": "{type} road",
+    "aboutHeading": "About this home",
+    "listedByOwner": "Listed by owner",
+    "sendMessageHeading": "Or send a message",
+    "sendMessageBody": "Prefer not to share your number yet? Send a request instead."
+  },
+  "amenities": {
+    "has_parking": "Parking",
+    "has_water_tank": "Water tank",
+    "has_backup_power": "Backup power",
+    "has_boys_quarters": "Boys' quarters",
+    "is_fenced": "Fenced compound",
+    "has_garden": "Garden",
+    "has_fiber_internet": "Fiber internet"
+  },
+  "roadAccess": {
+    "paved": "Paved",
+    "murram": "Murram",
+    "footpath": "Footpath"
+  },
+  "trustBadges": {
+    "titleVerified": "Title Verified",
+    "titleVerifiedTooltip": "This listing's ownership documents were reviewed by our team. Verification confirms the documents provided match the listing, not that the sale itself is risk-free — always do your own due diligence.",
+    "verifiedAgent": "Verified Agent",
+    "verifiedAgentTooltip": "This agent/owner submitted ID (and business registration, if an agency) for manual review by our team."
+  },
+  "whatsapp": {
+    "chatButton": "Chat on WhatsApp",
+    "message": "Hello, I'm interested in {title} — {url}"
+  },
+  "favorite": {
+    "save": "Save listing",
+    "remove": "Remove from saved"
+  },
+  "recentlyViewed": {
+    "heading": "Recently viewed"
+  },
+  "saved": {
+    "heading": "Saved listings",
+    "empty": "You haven't saved any listings yet — tap the heart on a listing to save it here."
+  },
+  "contactForm": {
+    "namePlaceholder": "Your name",
+    "phonePlaceholder": "Your phone number",
+    "defaultMessage": "Hi, is this still available? I'd like to schedule a viewing.",
+    "sentMessage": "Message sent — the owner/agent will reach out to you directly.",
+    "sending": "Sending…",
+    "submit": "Contact agent",
+    "errorRequired": "Fill in your name, phone, and a message."
+  },
+  "reportForm": {
+    "reportLink": "Report this listing",
+    "reasonPlaceholder": "Why are you reporting this?",
+    "reasonFraud": "Suspected fraud or scam",
+    "reasonWrongInfo": "Inaccurate information",
+    "reasonAlreadySold": "Already sold/rented",
+    "reasonDuplicate": "Duplicate listing",
+    "reasonOther": "Other",
+    "detailsPlaceholder": "Optional details",
+    "sending": "Sending…",
+    "submit": "Submit report",
+    "sentMessage": "Thanks — we'll review this listing.",
+    "errorReasonRequired": "Choose a reason."
+  },
+  "auth": {
+    "signInHeading": "Sign in to Kaze",
+    "signInBody": "For agents and property owners. We'll email you a sign-in link.",
+    "checkEmail": "Check your email for a sign-in link.",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "sending": "Sending…",
+    "sendLink": "Send sign-in link",
+    "errorEmailRequired": "Enter your email address."
+  },
+  "onboarding": {
+    "heading": "Complete your profile",
+    "body": "One more step before you can list properties.",
+    "fullName": "Full name",
+    "phoneNumber": "Phone number",
+    "phonePlaceholder": "+250 7xx xxx xxx",
+    "iAmA": "I am a...",
+    "propertyOwner": "Property owner",
+    "agent": "Agent",
+    "saving": "Saving…",
+    "continue": "Continue",
+    "errorRequired": "Fill in your name, phone number, and account type."
+  }
+}
