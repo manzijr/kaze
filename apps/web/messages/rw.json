@@ -40,6 +40,11 @@
     "noResultsTitle": "Nta mutungo uhuye n'ibyo ushaka",
     "noResultsBody": "Gerageza gukuraho bimwe mu bishungura."
   },
+  "errors": {
+    "loadFailedTitle": "Habaye ikibazo",
+    "loadFailedBody": "Ntitwashoboye gutangiza ibi ubu. Reba interineti yawe hanyuma ugerageze nanone.",
+    "retry": "Ongera ugerageze"
+  },
   "listingCard": {
     "forRent": "Gukodeshwa",
     "forSale": "Kugurishwa",

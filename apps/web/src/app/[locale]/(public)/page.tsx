@@ -42,7 +42,8 @@ export default async function HomePage({
     if (filters.province) locationQuery = locationQuery.eq("province", filters.province);
     if (filters.district) locationQuery = locationQuery.eq("district", filters.district);
     if (filters.sector) locationQuery = locationQuery.eq("sector", filters.sector);
-    const { data: matches } = await locationQuery;
+    const { data: matches, error: locationFilterError } = await locationQuery;
+    if (locationFilterError) throw new Error(locationFilterError.message);
     locationIds = (matches ?? []).map((m) => m.id);
   }
 
@@ -80,7 +81,11 @@ export default async function HomePage({
     data: { user },
   } = await supabase.auth.getUser();
 
-  const [{ data: listings }, { data: locations }, { data: favorites }] = await Promise.all([
+  const [
+    { data: listings, error: listingsError },
+    { data: locations, error: locationsError },
+    { data: favorites },
+  ] = await Promise.all([
     listingsQuery,
     supabase
       .from("locations")
@@ -92,6 +97,14 @@ export default async function HomePage({
       ? supabase.from("favorites").select("listing_id").eq("user_id", user.id)
       : Promise.resolve({ data: [] as { listing_id: string }[] }),
   ]);
+
+  // Favorites failing to load only loses the heart-filled state, not the
+  // ability to browse -- not worth a hard failure. Listings/locations are
+  // core to the page, so a real fetch error there should surface as an
+  // error (caught by error.tsx) rather than silently rendering as "no
+  // results", which would look like the data was lost.
+  if (listingsError) throw new Error(listingsError.message);
+  if (locationsError) throw new Error(locationsError.message);
 
   const favoritedIds = new Set((favorites ?? []).map((f) => f.listing_id));
 

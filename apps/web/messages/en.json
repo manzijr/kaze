@@ -40,6 +40,11 @@
     "noResultsTitle": "No listings match your search",
     "noResultsBody": "Try widening your filters."
   },
+  "errors": {
+    "loadFailedTitle": "Something went wrong",
+    "loadFailedBody": "We couldn't load this right now. Please check your connection and try again.",
+    "retry": "Try again"
+  },
   "listingCard": {
     "forRent": "For rent",
     "forSale": "For sale",

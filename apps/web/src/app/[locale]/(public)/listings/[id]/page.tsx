@@ -31,12 +31,17 @@ const LISTING_FIELDS =
 
 async function getListing(id: string) {
   const supabase = await createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("listings")
     .select(LISTING_FIELDS)
     .eq("id", id)
     .eq("status", "published")
     .single();
+  // PGRST116 ("no rows") is a genuine not-found; anything else (network/DB
+  // failure) should surface as a real error rather than a false 404.
+  if (error && error.code !== "PGRST116") {
+    throw new Error(error.message);
+  }
   return data;
 }
 
